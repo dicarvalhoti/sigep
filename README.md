@@ -1,8 +1,7 @@
 
 # 🛍️ Aplicação de Gestão de Pagamentos e Saldos
 
-Bem-vindo o **Sistema de Gerenciamento On-Line de Pagamentos**. Esta aplicação foi desenvolvida com **Ruby on Rails** no back-end e **React** no front-end, integrados em um única aplicação Rails,
-oferecendo uma interface elegante e funcionalidades avançadas.
+Bem-vindo o **Sistema de Gerenciamento On-Line de Pagamentos**. Esta aplicação foi desenvolvida com **Ruby on Rails** no back-end e **React** no front-end, integrados em um única aplicação Rails,oferecendo uma interface elegante e funcionalidades avançadas.
 
 ---
 
@@ -43,32 +42,27 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 - [Node.js](https://nodejs.org/) (versão 16 ou superior)
 - [Ruby](https://www.ruby-lang.org/) (versão 3.2+)
 
-### Passos para Configuração
+### Passos para Configuração(Development)
 
 1. Clone este repositório:
    ```bash
    git clone https://github.com/dicarvalhoti/sigep.git
    cd sigep
    ```
-
-2. Configure o Docker:
+2. Instale as dependências do Rails:
    ```bash
-   docker build -t sigep .
+   bundle install && yarn install  
    ```
 
-3. Instale as dependências do Rails:
+3. Configure o banco de dados:
    ```bash
-   docker run --env-file .env sigep bundle install  
+   bin/rails db:setup
    ```
-
-4. Configure o banco de dados:
+4. Inicie o servidor:
    ```bash
-   docker-compose run web rails db:setup
+   bin/dev
    ```
-5. Inicie o servidor:
-   ```bash
-   docker-compose up
-   ```
+5. Ou pode usar o DevContainer
 
 Acesse a aplicação em [http://localhost:3000](http://localhost:3000).
 
@@ -95,4 +89,4 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 - Desenvolvedor: [Jeová Guilherme de Carvalho Filho](https://github.com/dicarvalhoti)
 - Email: dicarvalhoti@gmail.com
-- 
+- Linkedin: https://www.linkedin.com/in/dicarvalhoti/

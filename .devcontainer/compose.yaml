@@ -1,0 +1,68 @@
+name: "sigep-application"
+
+services:
+  rails-app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+    - ../..:/workspaces:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    networks:
+      - sigep-network
+    depends_on:
+    - postgres
+    - selenium
+    - redis
+
+  selenium:
+    image: selenium/standalone-chromium
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    networks:
+      - sigep-network
+    command: [ "postgres", "-c", "max_connections=1000" ]
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+  
+  redis:
+    image: redis:7.2
+    container_name: redis
+    command: >
+      redis-server --port 6379 --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+  redis_data:
+  evolution_instances:
+
+networks:
+  sigep-network:
+    name: sigep-network
+    driver: bridge

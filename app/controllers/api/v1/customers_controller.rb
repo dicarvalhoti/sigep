@@ -1,0 +1,67 @@
+class Api::V1::CustomersController  < Api::BaseController
+  before_action :set_customer, only: %i[ show edit update destroy ]
+
+  def index
+    @customers = Customer.all
+    puts "AGORA SSS -----------------------------------------> #{@customers.inspect}"
+  end
+
+  # GET /customers/1 or /customers/1.json
+  def show
+  end
+
+  # GET /customers/new
+  def new
+    @customer = Customer.new
+  end
+
+  # GET /customers/1/edit
+  def edit
+  end
+
+  def create
+    @customer = Customer.new(customer_params)
+
+    respond_to do |format|
+      if @customer.save
+        format.html { redirect_to @customer, notice: "Customer was successfully created." }
+        format.json { render :show, status: :created, location: @customer }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @customer.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @customer.update(customer_params)
+        format.html { redirect_to @customer, notice: "Customer was successfully updated." }
+        format.json { render :show, status: :ok, location: @customer }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @customer.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @customer.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to customers_path, status: :see_other, notice: "Customer was successfully destroyed." }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_customer
+      @customer = Customer.find(params.expect(:id))
+    end
+
+    # Only allow a list of trusted parameters through.
+    def customer_params
+      params.fetch(:customer, {})
+    end
+end

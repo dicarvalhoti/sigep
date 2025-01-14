@@ -10,7 +10,7 @@ services:
     - ../..:/workspaces:cached
 
     # Overrides default command so things don't shut down after the process ends.
-    command: sleep infinity
+    command: bin/dev
 
     # Uncomment the next line to use a non-root user for all processes.
     # user: vscode
@@ -58,7 +58,6 @@ services:
 
 volumes:
   postgres_data:
-  pgadmin_data:
   redis_data:
   evolution_instances:
 

@@ -73,12 +73,6 @@ Acesse a aplicação em [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🧑‍💻 Contribuindo
-
-Contribuições são bem-vindas! Por favor, abra um [issue](https://github.com/seu-usuario/seu-repositorio/issues) para discutir qualquer ideia ou problema.
-
----
-
 ## 📄 Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).

@@ -10,15 +10,14 @@ services:
     - ../..:/workspaces:cached
 
     # Overrides default command so things don't shut down after the process ends.
-    command: bin/dev
+    command: sleep infinity
+    
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
     # Uncomment the next line to use a non-root user for all processes.
     # user: vscode
 
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
-    networks:
-      - sigep-network
     depends_on:
     - postgres
     - selenium
@@ -29,39 +28,36 @@ services:
     restart: unless-stopped
 
   postgres:
-    container_name: postgres
     image: postgres:latest
-    networks:
-      - sigep-network
-    command: [ "postgres", "-c", "max_connections=1000" ]
-    restart: always
+    command: postgres -c "pg_stat_statements.track=all" -c "shared_preload_libraries=pg_stat_statements"
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     expose:
       - 5432
   
   redis:
     image: redis:7.2
-    container_name: redis
+    restart: unless-stopped
     command: >
       redis-server --port 6379 --appendonly yes
     volumes:
-      - redis_data:/data
+      - redis-data:/data
     ports:
       - 6379:6379
-    expose:
-      - 6379
+
+  memcached:
+    image: memcached:latest
+    restart: unless-stopped
+    command: ["-m", "1024"]
 
 volumes:
-  postgres_data:
-  redis_data:
-  evolution_instances:
-
-networks:
-  sigep-network:
-    name: sigep-network
-    driver: bridge
+  postgres-data:
+  redis-data:
+  memcached-data:

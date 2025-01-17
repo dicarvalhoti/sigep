@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/ruby
 {
-  "name": "teste",
+  "name": "Sigep-Application",
   "dockerComposeFile": "compose.yaml",
   "service": "rails-app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
@@ -9,19 +9,32 @@
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/rails/devcontainer/features/bundler-cache:1": {},
     "ghcr.io/rails/devcontainer/features/activestorage": {},
-    "ghcr.io/rails/devcontainer/features/sqlite3": {}
+    "ghcr.io/rails/devcontainer/features/sqlite3": {},
+    "ghcr.io/rails/devcontainer/features/postgres-client": {},
+    "ghcr.io/devcontainers/features/node:1": {}
+
   },
 
   "containerEnv": {
     "CAPYBARA_SERVER_PORT": "45678",
     "SELENIUM_HOST": "selenium",
-    "REDIS_URL": "redis://redis:6379/1"
+    "DB_HOSTNAME": "postgres",
+		"DB_USERNAME": "postgres",
+		"DB_PASSWORD": "postgres",
+		"REDIS_URL": "redis://redis/0",
+		"MEMCACHE_SERVERS": "memcached:11211"
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [3000, 6379, 5432],
-
+  "forwardPorts": [
+    3000,
+    5432,
+    6379,
+    11211,
+    7700
+  ],
   // Configure tool-specific properties.
   // "customizations": {},
 
@@ -30,5 +43,155 @@
 
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "bin/setup"
+  "postCreateCommand": "bin/setup",
+  "customizations": {
+"vscode": {
+      "settings": {
+        "workbench": {
+				  "colorTheme": "One Dark Pro Darker",
+          "iconTheme": "vscode-icons"
+        },
+        "editor": {
+          "formatOnSave": true,
+          "quickSuggestions": {
+            "strings": "on"
+          }
+        },
+        "files": {
+          "associations": {
+            "*.css": "tailwindcss",
+            "*.erb": "html",
+            "*.html.erb": "erb",
+            "*.rb": "ruby"
+          }
+        },
+        "[ruby]": {
+          "editor": {
+            "defaultFormatter": "Shopify.ruby-lsp",
+            "formatOnSave": true,
+            "tabSize": 2,
+            "insertSpaces": true,
+            "semanticHighlighting.enabled": true,
+            "formatOnType": true
+          }
+        },
+        "[erb]": {
+          "editor": {
+            "formatOnSave": false
+          }
+        },
+        "rubyLsp": {
+          "rubyVersionManager": "rbenv",
+          "formatter": "rubocop"
+        },
+        "railsI18n": {
+          "localeFilePattern": "config/locales/**/*.yml",
+          "priorityOfLocales": [
+            "ar"
+          ]
+        },
+        "tailwindCSS": {
+          "includeLanguages": {
+            "plaintext": "html"
+          }
+        },
+        "erb-formatter": {
+          "lineLength": 240,
+          "commandPath": "/home/vscode/.rbenv/versions/3.3.4/bin/erb-formatter"
+        },
+        "erb": {
+          "erb-lint": {
+            "onSave": false
+          }
+        },
+        "ruby.useLanguageServer": true,
+        "ruby.lint": {
+          "rubocop": true
+        },
+        "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+        "prettier.requireConfig": true,
+        "prettier.singleQuote": true,
+        "prettier.trailingComma": "es5",
+        "sqltools.connections": [
+          {
+            "name": "Rails Development Database",
+            "driver": "PostgreSQL",
+            "previewLimit": 50,
+            "server": "postgres",
+            "port": 5432,
+            // update this to match config/database.yml
+            "database": "app_development",
+            "username": "postgres",
+            "password": "postgres"
+          },
+          {
+            "name": "Rails Test Database",
+            "driver": "PostgreSQL",
+            "previewLimit": 50,
+            "server": "postgres",
+            "port": 5432,
+            // update this to match config/database.yml
+            "database": "app_test",
+            "username": "postgres",
+            "password": "postgres"
+          }
+        ]
+      },
+      "extensions": [
+        "shopify.ruby-lsp",
+        "wingrunr21.vscode-ruby",
+        "misogi.ruby-rubocop",
+        "hbenl.vscode-test-explorer",
+        "connorshea.vscode-ruby-test-adapter",
+        "kaiwood.endwise",
+        "yuta.migrate-sql",
+        "vortizhe.simple-ruby-erb",
+        "aki77.rails-db-schema",
+        "aki77.rails-i18n",
+        "aki77.rails-partial",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "dsznajder.es7-react-js-snippets",
+        "formulahendry.auto-rename-tag",
+        "streetsidesoftware.code-spell-checker",
+        "xabikos.reactsnippets",
+        "ckolkman.vscode-postgres",
+        "mtxr.sqltools",
+        "microsoft.vscode-database",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "gruntfuggly.todo-tree",
+        "ritwickdey.liveserver",
+        "formulahendry.auto-close-tag",
+        "Postman.postman-for-vscode",
+        "bradlc.vscode-tailwindcss",
+        "bung87.vscode-gemfile",
+        "eamodio.gitlens",
+        "elia.erb-formatter",
+        "emeraldwalk.RunOnSave",
+        "manuelpuyol.erb-linter",
+        "marcoroth.stimulus-lsp",
+        "ms-vscode.live-server",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "vscode-icons-team.vscode-icons",
+        "waderyan.gitblame",
+        "msjsdiag.vscode-react-native",
+        "dsznajder.es7-react-js-snippets",
+        "burkeholland.simple-react-snippets",
+        "ms-azuretools.vscode-docker",
+        "azemoh.one-monokai",
+        "fabiospampinato.vscode-monokai-night",
+        "mikestead.dotenv",
+        "IronGeek.vscode-env",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.remotehub",
+        "ZainChen.json",
+        "shd101wyy.markdown-preview-enhanced",
+        "davidpallinder.rails-test-runner",
+        "Gruntfuggly.todo-tree"
+      ]
+    }
+  }
 }
